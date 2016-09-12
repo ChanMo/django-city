@@ -45,5 +45,5 @@ Django-city
 版本更改:
 ---------
 
-v0.0.2 添加`CityViewMixin`
-v0.0.1 第一版
+- v0.0.2 添加`CityViewMixin`
+- v0.0.1 第一版
