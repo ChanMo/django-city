@@ -22,8 +22,28 @@ Django-city
         ...
     )
 
+在admin中使用:
+
+.. code-block::
+    
+    from city.admin import CityAdminMixin
+
+    class DemoAdmin(CityAdminMixin, admin.ModelAdmin):
+        pass
+
+在views中使用:
+
+.. code-block::
+
+    from city.views import CityViewMixin
+
+    class DemoView(CityViewMixin):
+        pass
+
+
 
 版本更改:
 ---------
 
+v0.0.2 添加`CityViewMixin`
 v0.0.1 第一版
