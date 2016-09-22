@@ -9,11 +9,11 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name = 'django-city',
-    version = '0.0.2',
+    version = '0.0.3',
     packages = ['city'],
     include_package_data = True,
     license = 'BSD License',
-    description = 'Add CityViewMixin to views',
+    description = 'rewrite CityAdminMixin',
     long_description = README,
     url = 'https://github.com/ChanMo/django-city/',
     author = 'ChanMo',
