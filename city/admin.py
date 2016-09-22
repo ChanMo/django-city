@@ -55,7 +55,7 @@ class CityAdminMixin(admin.ModelAdmin):
                 add_view(request, form_url, extra_context)
 
 
-    def change_view(self, request, object_id, extra_context=None):
+    def change_view(self, request, object_id, form_url='', extra_context=None):
         """ If city has not add authority """
         if self.get_city(request):
             if ('city',) not in self.exclude:
@@ -63,7 +63,7 @@ class CityAdminMixin(admin.ModelAdmin):
             #if self.readonly_for_city not in self.readonly_fields:
             #    self.readonly_fields += self.readonly_for_city
         return super(CityAdminMixin,self).\
-                change_view(request, object_id, extra_context)
+                change_view(request, object_id, form_url, extra_context)
 
 
     def get_queryset(self, request):
