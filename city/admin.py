@@ -12,47 +12,74 @@ class CityAdminMixin(admin.ModelAdmin):
     """
     City auth admin
     """
-    city = None
+    list_display = ()
+    list_filter = ()
+    fields = ()
+    exclude = ()
+    readonly_for_city = ()
 
-    def set_city(self, request):
+    def get_city(self, request):
         try:
             city = City.objects.get(user=request.user)
         except City.DoesNotExist:
             city = None
-        self.city = city
+        return city
+
 
     def get_list_display(self, request):
-        self.set_city(request)
-        if self.city:
+        if self.get_city(request):
             return self.list_display
         else:
-            return ('city',) + self.list_display
+
+            if ('city,') in self.list_display:
+                return self.list_display
+            else:
+                return ('city',) + self.list_display
+
 
     def get_list_filter(self, request):
-        self.set_city(request)
-        if self.city:
+        if self.get_city(request):
             return self.list_filter
         else:
-            return ('city',) + self.list_filter
+            if ('city',) in self.list_filter:
+                return self.list_filter
+            else:
+                return ('city',) + self.list_filter
 
-    def get_fields(self, request, obj=None):
-        self.set_city(request)
-        if self.city:
-            return self.fields
-        else:
-            return ('city',) + self.fields
+
+    def add_view(self, request, form_url='', extra_context=None):
+        if self.get_city(request):
+            if ('city',) not in self.exclude:
+                self.exclude += ('city',)
+        return super(CityAdminMixin, self).\
+                add_view(request, form_url, extra_context)
+
+
+    def change_view(self, request, object_id, extra_context=None):
+        """ If city has not add authority """
+        if self.get_city(request):
+            if ('city',) not in self.exclude:
+                self.exclude += ('city',)
+            #if self.readonly_for_city not in self.readonly_fields:
+            #    self.readonly_fields += self.readonly_for_city
+        return super(CityAdminMixin,self).\
+                change_view(request, object_id, extra_context)
+
 
     def get_queryset(self, request):
-        self.set_city(request)
         queryset = super(CityAdminMixin, self).get_queryset(request)
-        if self.city:
-            queryset = queryset.filter(city=self.city)
+        city = self.get_city(request)
+        if city:
+            queryset = queryset.filter(city=city)
         return queryset
 
+
     def save_model(self, request, obj, form, change):
-        self.set_city(request)
-        if self.city:
-            obj.city = self.city
+        """ Only for Add """
+        city = self.get_city(request)
+        if city:
+            obj.city = city
         obj.save()
+
 
 admin.site.register(City, CityAdmin)
